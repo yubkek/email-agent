@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import Chat from './pages/Chat.jsx';
 
-const API = 'http://localhost:3001';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export default function App() {
   const [auth, setAuth] = useState(null);

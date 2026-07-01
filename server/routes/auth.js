@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getAuthUrl, getTokensFromCode, buildAuthClient, getUserEmail } from '../services/gmail.js';
 
 const router = Router();
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 router.get('/google', (req, res) => {
   res.redirect(getAuthUrl());
@@ -11,7 +12,7 @@ router.get('/google/callback', async (req, res) => {
   const { code, error } = req.query;
 
   if (error || !code) {
-    return res.redirect('http://localhost:5173?error=access_denied');
+    return res.redirect(`${FRONTEND_URL}?error=access_denied`);
   }
 
   try {
@@ -20,10 +21,10 @@ router.get('/google/callback', async (req, res) => {
     const email = await getUserEmail(auth);
     req.session.tokens = tokens;
     req.session.userEmail = email;
-    res.redirect('http://localhost:5173/dashboard');
+    res.redirect(`${FRONTEND_URL}/chat`);
   } catch (err) {
     console.error('OAuth callback error:', err);
-    res.redirect('http://localhost:5173?error=auth_failed');
+    res.redirect(`${FRONTEND_URL}?error=auth_failed`);
   }
 });
 
@@ -36,7 +37,7 @@ router.get('/status', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  req.session.destroy();
+  req.session = null;
   res.json({ ok: true });
 });
 

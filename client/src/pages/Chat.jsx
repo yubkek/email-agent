@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AgentMessage from '../components/AgentMessage.jsx';
 
-const API = 'http://localhost:3001';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const STORAGE_KEY = 'email-agent-chats';
 
 function loadChats() {

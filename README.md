@@ -128,6 +128,40 @@ email-agent/
             └── AgentMessage.jsx   # Tool steps, email list, draft compose
 ```
 
+## Deploying (Render + Vercel)
+
+### Backend → Render (free)
+
+1. Push your repo to GitHub
+2. Go to [render.com](https://render.com) → New → Web Service → connect your repo
+3. Render will detect `render.yaml` automatically
+4. Add these environment variables in the Render dashboard:
+
+| Key | Value |
+|-----|-------|
+| `GOOGLE_CLIENT_ID` | from Google Cloud |
+| `GOOGLE_CLIENT_SECRET` | from Google Cloud |
+| `GOOGLE_REDIRECT_URI` | `https://your-app.onrender.com/auth/google/callback` |
+| `GROQ_API_KEY` | from Groq console |
+| `SESSION_SECRET` | any random string |
+| `FRONTEND_URL` | your Vercel frontend URL (set after step below) |
+
+### Frontend → Vercel (free)
+
+1. Go to [vercel.com](https://vercel.com) → New Project → import your repo
+2. Set **Root Directory** to `client`
+3. Add environment variable: `VITE_API_URL` = your Render backend URL (e.g. `https://your-app.onrender.com`)
+4. Deploy
+
+### Final steps
+
+1. In Google Cloud Console → **Credentials** → add your Render URL as an authorized redirect URI:
+   `https://your-app.onrender.com/auth/google/callback`
+2. In Google Cloud Console → **OAuth consent screen** → **Test users** → add each person's Gmail address
+3. Share your Vercel URL with them — they click Sign in with Google and they're in
+
+---
+
 ## How the agent works
 
 1. User sends a message

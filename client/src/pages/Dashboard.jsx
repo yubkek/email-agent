@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EmailCard from '../components/EmailCard.jsx';
 
-const API = 'http://localhost:3001';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export default function Dashboard({ auth, setAuth }) {
   const [emails, setEmails] = useState([]);

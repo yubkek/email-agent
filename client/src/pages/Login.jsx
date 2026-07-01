@@ -23,7 +23,7 @@ export default function Login({ error }) {
         )}
 
         <a
-          href="http://localhost:3001/auth/google"
+          href={`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/auth/google`}
           className="w-full flex items-center justify-center gap-3 text-sm font-medium rounded-lg px-4 py-3 transition"
           style={{ background: '#1e1e1e', border: '1px solid #2a2a2a', color: '#c0c0c0' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#252525'; e.currentTarget.style.borderColor = '#3a3a3a'; }}

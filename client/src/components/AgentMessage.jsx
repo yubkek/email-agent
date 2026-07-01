@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API = 'http://localhost:3001';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const TOOL_META = {
   list_today_emails: { icon: '📋', label: "Listed today's emails" },

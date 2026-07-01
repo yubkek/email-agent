@@ -1,29 +1,26 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import session from 'express-session';
-import FileStoreFactory from 'session-file-store';
+import cookieSession from 'cookie-session';
 import authRoutes from './routes/auth.js';
 import emailRoutes from './routes/emails.js';
 import agentRoutes from './routes/agent.js';
 
-const FileStore = FileStoreFactory(session);
 const app = express();
 const PORT = process.env.PORT || 3001;
+const isProd = process.env.NODE_ENV === 'production';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
-const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
-
+app.set('trust proxy', 1);
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
-app.use(session({
+app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cookieSession({
+  name: 'session',
   secret: process.env.SESSION_SECRET || 'dev-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: new FileStore({ path: './sessions', ttl: THIRTY_DAYS / 1000, reapInterval: 3600 }),
-  cookie: { secure: false, httpOnly: true, maxAge: THIRTY_DAYS },
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  secure: isProd,
+  sameSite: isProd ? 'none' : 'lax',
+  httpOnly: true,
 }));
 
 app.use('/auth', authRoutes);
